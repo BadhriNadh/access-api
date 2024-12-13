@@ -24,14 +24,14 @@ class UserServiceImpl (
 
 
     override fun saveUser(user: User?): User? {
-        val userEncode: User = User(null, user!!.profileName, user.userName, passwordEncoder.encode(user.password))
+        val userEncode: User = User(null, user!!.userName, passwordEncoder.encode(user.password),  user.userName, user.productName)
         return userRepository.save(userEncode)
     }
 
     override fun generateToken(authentication: Authentication?): String? {
         val now = Instant.now()
         val claims = JwtClaimsSet.builder()
-            .issuer("data-wiz")
+            .issuer("access-api")
             .issuedAt(now)
             .expiresAt(now.plus(1, ChronoUnit.HOURS))
             .subject(authentication!!.name)
