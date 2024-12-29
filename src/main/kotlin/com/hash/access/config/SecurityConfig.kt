@@ -33,16 +33,13 @@ class SecurityConfig(
     @Value("\${allow.origin.url}")
     lateinit var origin: String
 
-//    @Autowired
-//    private lateinit var userService: SecurityUserDetailsService
-
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf { it.disable() }
             .cors { }
             .authorizeHttpRequests {
-                it.requestMatchers("/user/save","/api/user/save").permitAll()
+                it.requestMatchers("/user/register","/api/user/register").permitAll()
                     .anyRequest().authenticated()
             }
             .oauth2ResourceServer { it.jwt(Customizer.withDefaults()) }

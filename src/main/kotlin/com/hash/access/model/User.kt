@@ -16,5 +16,5 @@ data class User(
 
     var profileName: String,
 
-    var productName: String? = null
+    var role: String? = null
 )

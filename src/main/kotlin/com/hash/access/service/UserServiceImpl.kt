@@ -23,24 +23,31 @@ class UserServiceImpl (
 ) : UserService  {
 
 
-    override fun saveUser(user: User?): User? {
-        val userEncode: User = User(null, user!!.userName, passwordEncoder.encode(user.password),  user.userName, user.productName)
-        return userRepository.save(userEncode)
+    override fun saveUser(user: User): Boolean {
+        val existingUser = userRepository.findByUserName(user.userName)
+
+        if (existingUser.isPresent) {
+            return false
+        }
+
+        val userEncode: User = User(null, user.userName, passwordEncoder.encode(user.password),  user.profileName, user.role)
+        userRepository.save(userEncode)
+        return true;
     }
 
-    override fun generateToken(authentication: Authentication?): String? {
+    override fun generateToken(authentication: Authentication): String {
         val now = Instant.now()
         val claims = JwtClaimsSet.builder()
             .issuer("access-api")
             .issuedAt(now)
             .expiresAt(now.plus(1, ChronoUnit.HOURS))
-            .subject(authentication!!.name)
+            .subject(authentication.name)
             .build()
         val jwsHeader = JwsHeader.with { "HS256" }.build()
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).tokenValue
     }
 
-    override fun getUserId(userName: String?): Int {
-        return userRepository.findByUserName(userName)?.get()!!.userId!!
+    override fun getUserId(userName: String): Int {
+        return userRepository.findByUserName(userName).get().userId!!
     }
 }
