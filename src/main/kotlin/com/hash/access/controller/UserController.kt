@@ -27,7 +27,8 @@ class UserController (@Autowired private val userService: UserService) {
 
     @GetMapping("/login")
     fun token(authentication: Authentication): ResponseEntity<Response> {
-        val data: ResponseData = ResponseData(userService.generateToken(authentication), userService.getUserId(authentication.name) )
+        val user: User = userService.getUserId(authentication.name)
+        val data: ResponseData = ResponseData(userService.generateToken(authentication), user.userId!!, user.profileName  )
         val response: Response =
             Response(data, HttpStatus.ACCEPTED.value(), HttpStatus.ACCEPTED.name)
         return ResponseEntity.status(HttpStatus.ACCEPTED).body<Response>(response)

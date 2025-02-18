@@ -47,7 +47,7 @@ class UserServiceImpl (
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).tokenValue
     }
 
-    override fun getUserId(userName: String): Int {
-        return userRepository.findByUserName(userName).get().userId!!
+    override fun getUserId(userName: String): User {
+        return userRepository.findByUserName(userName).get()
     }
 }

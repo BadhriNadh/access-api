@@ -8,5 +8,5 @@ interface UserService {
 
     fun generateToken(authentication: Authentication): String
 
-    fun getUserId(userName: String): Int
+    fun getUserId(userName: String): User
 }
